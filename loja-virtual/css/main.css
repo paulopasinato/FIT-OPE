@@ -1,0 +1,122 @@
+html, body {
+	padding: 0;
+	margin: 0;
+	border: none;
+	font-family: 'Montserrat', 'Trebuchet MS', sans-serif;
+	font-size: 12px;
+}
+body {
+	padding-top: 70px;
+}
+.help {
+	cursor: help;
+}
+.bold{
+	font-weight: bold;
+}
+.navbar .navbar-nav .dropdown-menu a{
+	font-size: 12px;
+}
+.align-right{
+	text-align: right !important;
+}
+footer {
+	background-color: #337ab7;
+	width: 100%;
+	height: auto;
+	position: absolute;
+	left: 0;
+	color: #eee;
+	font-size: 12px;
+	margin-top: 25px;
+	padding-top: 10px;
+}
+footer a {
+	color: #9d9d9d;
+	font-size: 12px;
+}
+footer a:hover {
+	color: #ffffff;
+}
+.login {
+	padding: 20px;
+	min-height: 400px;
+	background-color: #ffffff;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+    text-align: center;
+	box-shadow: 0px 0px 10px 1px #c5c5c5;
+	margin-bottom: 20px;
+}
+.login .login-inner {
+	margin:0 auto;
+	max-width: 380px;
+	width: auto;
+}
+.login > h3 {
+	margin-left: 5px;
+	line-height: 35px;
+}
+.login .email,
+.login .password {
+	margin-bottom: 5px;
+	height: 45px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+.login .login-inner .submit {
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	margin-bottom: 20px;
+	text-transform: uppercase;
+}
+.thumbnail {
+	height: 100% !important;
+	min-height: inherit !important;
+}
+.box-produto {
+	/*height: 410px;*/
+	margin-bottom: 15px;
+}
+.box-compatibilidade {
+	margin-left: 0;
+	padding-left: 0;
+	height: 85px;
+	overflow-y: auto;
+	margin-bottom: 10px;
+}
+.imgProduto {
+	width: 320px !important;
+	height: 180px !important;
+}
+body {
+	background-color: #eeeeee;
+}
+body > .container {
+	background-color: #ffffff;
+	border-radius: 5px;
+	box-shadow: 0 0 10px 5px #dddddd;
+}
+.navbar-inverse {
+	background-color: #337ab7;
+	border-color: #337ab7;
+}
+.navbar-inverse .navbar-brand,
+.navbar-inverse .navbar-nav>li>a,
+footer a {
+	color: #ffffff;
+}
+.navbar-brand {
+	padding: 5px !important;
+	font-size: 14px !important;
+}
+.badge{
+	color: #337ab7 !important;
+	background-color: #fff !important;
+}
+.popover-content{
+	color:#000 !important;
+}

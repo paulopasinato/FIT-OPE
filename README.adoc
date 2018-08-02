@@ -1,0 +1,24 @@
+= OPE Impacta (TCC)
+
+Trata-se do projeto TCC ADS 2017 da Faculdade Impacta de Tecnologia
+
+Este projeto tem como objetivo desenvolver uma solução para gerenciamento de loja
+de autopeças para veículos pesados, presente no mercado há mais de quinze anos
+e que não utilizava tecnologia para a gestão do negócio. O problema do cliente era
+uma gestão ineficiente do negócio, com falta de controle de vendas, de estoque e
+diminuição do faturamento, pois a divulgação da loja limitava-se apenas à região
+onde ficam sediados. A solução contemplou o desenvolvimento de um sistema web
+de uso da loja para cadastro de clientes, produtos, gerenciamento de orçamentos,
+vendas, controle de estoque e geração de relatórios e um site com vitrine virtual, no
+qual os clientes da loja poderão consultar a lista de produtos e solicitar orçamento. A
+tecnologia utilizada na codificação do sistema foi Java com banco de dados My SQL
+e PHP para desenvolvimento do site.
+
+
+No desenvolvimento do sistema de Gerenciamento da loja foi utilizada linguagem de programação Java (JSF) com frameworks JPA/Hibernate, Primefaces e Bootstrap.
+
+Para a Vitrine Virtual foi utilizado PHP com framework Bootstrap. 
+O banco de dados dos dois subsistemas é integrado e foi utilizado o MySQL.
+
+Para o desenvolvimento de ambos sistemas, foi utilizado o padrão de arquitetura MVC (Model-View-Controller), sendo a camada Model responsável pela leitura,
+escrita e validações de dados, View responsável pela visualização e Controller responsável por receber requisições do usuário.

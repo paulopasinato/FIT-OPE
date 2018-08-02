@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions">
+
+    <ul class="nav navbar-nav">
+    	<!--
+        <li class="dropdown messages-menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                <i class="fa fa-cart-arrow-down"></i>
+                <span id="spanQtd" class="label label-success">#{movimentacaoControl.estoqueBaixo.size()}</span>
+            </a>
+            <ul class="dropdown-menu">
+            	<li class="header align-center"><a href="#{movimentacaoControl.getUrl()}">Produtos com estoque baixo</a></li>
+            </ul>
+        </li>
+         <li class="dropdown notifications-menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                <i class="fa fa-bell-o"></i>
+                <span class="label label-warning">2</span>
+            </a>
+            <ul class="dropdown-menu">
+                <li class="header align-center">You have 2 notifications.</li>
+                <li>
+                    inner menu: contains the actual data
+                    <ul class="menu">
+                        <li>
+                            Notification 1
+                        </li>
+
+                        <li>
+                            Notification 2
+                        </li>
+                    </ul>
+                </li>
+                <li class="footer"><a href="#">See all notifications</a></li>
+            </ul>
+        </li> -->
+        
+        <li class="dropdown user user-menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <!-- 
+                <pe:gravatar id="userImage"
+                             value="nonexisting"/>
+                             -->
+                             <i class="fa fa-user" />
+                <span class="hidden-xs">#{loginControl.getUsuarioLogado().getNome()}</span>
+            </a>
+            <ul class="dropdown-menu">
+                <li class="user-header">
+                <!--
+                    <div class="hidden-xs">
+                        <pe:gravatar style="border-radius: 50%"
+                                     value="rmpestano@gmail.com"/>
+                    </div>
+                     <p>
+                        UsuÃ¡rio
+                        <small> Java EE Developer </small>
+                    </p> 
+                -->
+                </li>
+                <li class="user-footer">
+                    <h:form prependId="false">
+                        <div class="pull-left">
+                         <p:link href="/sistema/cadastro/alterarSenha.xhtml">
+                         	<p:outputLabel value="Alterar Senha" style="color: green; text-decoration: underline;" />
+                         </p:link>
+                         
+                         <!-- 
+                         <p:commandLink  styleClass="btn btn-danger" action="/sistema/cadastro/alterarSenha.xhtml"  value="Alterar Senha"/>
+                         -->
+                        </div>
+                        <div class="pull-right">
+                            <p:commandLink id="logout" action="#{logoutMB.doLogout}"  title="Logoff">
+                                <i class="fa fa-sign-out fa-2x"></i>
+                            </p:commandLink>
+                        </div>
+                    </h:form>
+                </li>
+            </ul>
+        </li>
+
+    </ul>
+
+
+</ui:composition>

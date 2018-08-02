@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+				xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:adm="http://github.com/adminfaces"
+                xmlns:o="http://omnifaces.org/ui"
+                template="/WEB-INF/templates/template.xhtml">
+                
+       <ui:define name="head-end">
+	       <style type="text/css">
+	            .ui-datatable .ui-datatable-header {
+	                text-align: right !important;
+	       		}
+	       		
+	       		span.ui-fileupload-choose > span.ui-icon-plusthick{
+    				display: none !important;
+				}
+				span.ui-fileupload-choose > span.ui-button-text{
+					padding-left: 1em !important;
+				}
+	       </style>
+    </ui:define>
+
+    <ui:define name="title">
+        Produto
+    </ui:define>
+
+	<ui:define name="body">
+		<adm:breadcrumb link="/sistema/cadastro/cadastroProduto" title="Produto"/>
+		<h:form id="frmList">
+			<p:growl id="msgOk" showSummary="false" severity="info"/>
+            <p:growl id="msgErro" showSummary="false" strick="true" severity="warn,error,fatal"/>
+	        
+		<div class="box box-primary">
+        	<div class="box-header with-border">
+				<div id="main-buttons" class="hidden-sm hidden-xs">
+                        <p:commandButton icon="fa fa-plus"
+                                         value="Novo" styleClass="btn-primary" 
+                                         actionListener="#{produtoControl.doStartAddRecord()}" 
+                                         update="frmCadastro" />
+                                         
+                        <p:spacer width="5"/>
+                        
+                        <p:commandButton value="Excluir" icon="fa fa-trash" styleClass="btn-danger"
+                                         action="#{produtoControl.deleteRecord()}"
+                                         actionListener="#{produtoControl.unRowSelect()}"
+                                         type="submit" update="frmList:tabela @(.ui-button)"
+                                         disabled="#{produtoControl.disableButton}">
+                        	<p:confirm header="Confirmação" message="Você tem certeza que deseja excluir este item?" global="true" showEffect="fade" hideEffect="fade" styleClass="box-warning" />
+                                <p:confirmDialog global="true" closable="true" closeOnEscape="true" appendTo="@(body)">
+                                    <p:commandButton value="Sim" type="button" styleClass="btn-primary ui-confirmdialog-yes" icon="fa fa-check" />
+                                    <p:commandButton value="Não" type="button" styleClass="btn-danger ui-confirmdialog-no" icon="fa fa-close" />
+                        	</p:confirmDialog>
+                        </p:commandButton>      
+                                     
+                        <p:spacer width="5"/>
+                        
+                        <p:commandButton value="Editar" update="@(.ui-dialog)" styleClass="btn-info"
+                        				 disabled="#{produtoControl.disableButton}"
+                                         oncomplete="PF('dlgCadastro').show()" icon="fa fa-edit">
+                        </p:commandButton>                 
+                    </div>
+                    <p:splitButton value="Novo" action="#{produtoControl.doStartAddRecord()}" update="frmCadastro"
+                                   icon="fa fa-check"
+                                   styleClass="hidden-md hidden-lg btn-primary">
+                        <p:menuitem value="Editar" oncomplete="PF('dlgCadastro').show()"
+                        			disabled="#{produtoControl.disableButton}"
+                                    process="@this" update="@(.ui-dialog)" icon="fa fa-edit"/>
+                        <p:menuitem value="Excluir" process="@this" icon="fa fa-trash"
+                                    action="#{produtoControl.deleteRecord()}"
+                                    actionListener="#{produtoControl.unRowSelect()}"
+                                    type="submit" update="frmList:tabela @(.ui-button)"
+                                    disabled="#{produtoControl.disableButton}">
+                            <p:confirm header="Confirmação" message="Você tem certeza que deseja excluir este item?" icon="ui-icon-danger"/>
+                        </p:menuitem>
+                    </p:splitButton>
+                   
+                    <p:separator/>
+
+			<p:dataTable id="tabela" var="registro" value="#{produtoControl.list}" rowKey="#{registro.idProduto}" selectionMode="single" selection="#{produtoControl.selected}"
+							paginator="true" rows="10" paginatorPosition="bottom" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                            currentPageReportTemplate="[ Página: {currentPage}/{totalPages} ]" emptyMessage="Nenhum Registro Encontrado"
+                            widgetVar="wvTable">
+							
+                <p:ajax event="rowSelect" listener="#{produtoControl.onRowSelect()}" update="@(.ui-button)"/>
+                
+                <p:column styleClass="align-center" width="5%">
+                	<p:rowToggler/>
+                </p:column>
+
+				<p:column headerText="Código" sortBy="#{registro.idProduto}" style="text-align: center" filterBy="#{registro.idProduto}" filterMatchMode="contains">
+					<h:outputText value="#{registro.idProduto}" />
+				</p:column>
+				
+				<p:column headerText="Categoria" filterBy="#{registro.categoria.nome}" sortBy="#{registro.categoria.nome}" filterMatchMode="contains">
+					<h:outputText value="#{registro.categoria.nome}" />
+				</p:column>
+
+				<p:column headerText="Nome" filterBy="#{registro.nome}" sortBy="#{registro.nome}" filterMatchMode="contains">
+					<h:outputText value="#{registro.nome}" />
+				</p:column>
+
+				<p:column headerText="Ativo" sortBy="#{registro.ativo}"  filterBy="#{registro.ativo}" resizable="false" toggleable="true" style="text-align:center; padding: 0;">
+					<f:facet id="idFilter" name="filter" >
+	                    <p:selectOneButton onchange="PF('wvTable').filter()">
+		                    <f:converter converterId="javax.faces.Boolean" />
+		                    <f:selectItem itemLabel="Todos" itemValue="" />
+		                    <f:selectItem itemLabel="Sim" itemValue="true" />
+		                    <f:selectItem itemLabel="Não" itemValue="false" />
+	                    </p:selectOneButton>
+                    </f:facet>
+				
+					<p:graphicImage  value="#{utilityTela.getBooleanImg(registro.ativo)}"
+                                     style="width: 25px;  height: 25px;" 
+                                     alt="#{registro.ativo ? Não : Sim}" />
+				</p:column>
+				
+				<p:rowExpansion>
+	                <p:panelGrid  columns="2" style="width:100%"   >
+		                <h:outputText value="Código : "/>
+		                <h:outputText value="#{registro.idProduto}"  />
+		                <h:outputText value="Nome : " />
+		                <h:outputText value="#{registro.nome}" />
+		                <h:outputText value="Categoria : " />
+		                <h:outputText value="#{registro.categoria.nome}" />
+		                <h:outputText value="Qtde. Estoque : " />
+		                <h:outputText value="#{registro.quantidade}" />
+		                <h:outputText value="Preço de Compra : " />
+		                <h:outputText value="R$ #{registro.precoCompra}" />
+		                <h:outputText value="Margem : " />
+		                <h:outputText value="#{registro.margem} %" />
+		                <h:outputText value="Preço de Venda : " />
+		                <h:outputText value="R$ #{registro.precoVenda}" />
+						<h:outputText value="Ativo : " />
+						<h:outputText value="#{utilityTela.getDescBoolean(registro.ativo)}" />
+	                </p:panelGrid>
+                </p:rowExpansion>
+
+				<f:facet name="footer">
+					Total: #{produtoControl.list.size()}
+				</f:facet>
+			</p:dataTable>
+			     </div>
+            </div>
+
+		</h:form>
+			<p:dialog width="auto" height="auto" widgetVar="dlgCadastro" resizable="false" 
+					header="Produto" focus="frmCadastro:tabViewGeral:nome" styleClass="box-primary"
+					modal="true" appendTo="@(body)" closable="true" closeOnEscape="true" responsive="true" dynamic="true" maximizable="true">
+				<h:form id="frmCadastro">
+					<style type="text/css">
+	        			.styleInNumber input{
+		        			width: 120px !important; 
+		        		}
+	        		</style>
+				
+					<p:growl id="growl" sticky="true" showDetail="true" life="3000" />
+					   
+	                <p:tabView id="tabViewGeral">
+        				<p:tab title="Dados do Produto">	
+        					<p:panelGrid id="panelCodigo" columns="2" cellpadding="5" layout="grid"  styleClass="no-border ui-fluid">
+								<p:outputLabel value="Código: ">
+									<p:inputText value="#{produtoControl.selected.idProduto}" disabled="true"/>
+								</p:outputLabel>
+							
+								<p:selectOneButton id="manyBtn" value="#{produtoControl.selected.ativo}" style="margin-top: 24px; width: 130px" >
+									<f:converter converterId="javax.faces.Boolean" />
+					                <f:selectItem itemLabel="Ativo" itemValue="true"/>
+					                <f:selectItem itemLabel="Inativo" itemValue="false"/>
+			                    </p:selectOneButton>
+			                </p:panelGrid>
+			                
+        					<p:panel id="panelProduto" style="margin-top: 10px">
+			               		<p:panelGrid id="panelNome" columns="1" cellpadding="5" layout="grid"  styleClass="no-border ui-fluid">
+									<p:outputLabel for="nome" value="Nome: " ><br/>
+										<p:inputText id="nome" value="#{produtoControl.selected.nome}" maxlength="50" required="true" style="width: 300px" requiredMessage="Campo Nome é necessário"/>
+										<p:message for="nome"/>
+									</p:outputLabel>
+								</p:panelGrid>	
+								<p:panelGrid id="panelCategoria" columns="2" cellpadding="5" layout="grid"  styleClass="no-border ui-fluid">
+									<p:outputLabel for="selectCategoria" value="Categoria: " >
+										<p:selectOneMenu id="selectCategoria" value="#{produtoControl.selected.categoria}" filter="true" filterMatchMode="contains" converter="omnifaces.SelectItemsConverter" style="width: 300px" required="true" requiredMessage="Campo Categoria é necessário">
+					                    	<f:selectItem itemLabel="Selecione..." itemValue="" />
+					                        	<f:selectItems value="#{categoriaControl.listAtivo}" var="item" itemLabel="#{item.idCategoria} - #{item.nome}" itemValue="#{item}" />
+					                    </p:selectOneMenu> 
+					               	<p:message for="selectCategoria"/>
+				                   </p:outputLabel>
+				                   
+				                   <p:outputLabel for="selectModelos" value="Modelos compatíveis: " >
+										<p:selectCheckboxMenu value="#{produtoControl.modeloSelectedList}" id="selectModelos" filter="true" filterMatchMode="contains" converter="omnifaces.SelectItemsConverter" style="width: 300px" required="true" requiredMessage="Selecione ao menos um modelo">
+						                	<f:selectItem itemLabel="Selecione..." itemValue="" itemDisabled="true"/>
+						                    <f:selectItems value="#{modeloControl.listAtivo}" var="item" itemLabel="#{item.idModelo} - #{item.nome}" itemValue="#{item}" />
+						                    	<p:ajax event="change" listener="#{produtoControl.addProdutoModelo()}"/>
+						                </p:selectCheckboxMenu> 
+						                <p:message for="selectModelos"/>
+					                 </p:outputLabel>
+			                    </p:panelGrid>
+								<p:panelGrid id="panelDescricao" columns="1" cellpadding="5" layout="grid"  styleClass="no-border ui-fluid">
+									<p:outputLabel for="descProduto" value="Descrição do Produto: ">
+										<p:inputTextarea id="descProduto" value="#{produtoControl.selected.descricao}" counter="display" counterTemplate="{0} caracteres restantes."
+										maxlength="255" rows="5" cols="42" required="true" requiredMessage="Campo Descrição é necessário"/>
+										<h:outputText id="display" />
+										<p:message for="descProduto"/>
+									</p:outputLabel>
+								</p:panelGrid>	
+							</p:panel>	
+						</p:tab>
+						<p:tab title="Financeiro">
+							<p:panel id="panelFinanceiro" style="margin-top: 10px; width: 700px" >
+								<p:panelGrid id="panelVitrine" columns="2" cellpadding="5" layout="grid"  styleClass="no-border ui-fluid">
+									<p:outputLabel for="mostraVitrine" value="Exibir na Vitrine: "><br/>
+										<p:selectOneButton id="mostraVitrine" value="#{produtoControl.selected.mostraVitrine}" style="float:right; width: 130px" required="true" requiredMessage="Campo Exibir na Vitrine é necessário">
+												<f:converter converterId="javax.faces.Boolean" />
+						                        <f:selectItem itemLabel="Sim" itemValue="true"/>
+						                        <f:selectItem itemLabel="Não" itemValue="false"/>
+				                    	</p:selectOneButton>
+				                    	<p:message for="mostraVitrine"/>	
+				                    </p:outputLabel>	
+			                    	
+									<p:outputLabel for="controlaEstoque" value="Controlar Estoque: "><br/>
+										<p:selectOneButton id="controlaEstoque" value="#{produtoControl.selected.controlaEstoque}" style="float:right; width: 130px" required="true" requiredMessage="Campo Controlar Estoque é necessário">
+												<f:converter converterId="javax.faces.Boolean" />
+						                        <f:selectItem itemLabel="Sim" itemValue="true"/>
+						                        <f:selectItem itemLabel="Não" itemValue="false"/>
+				                    	</p:selectOneButton>
+				                    	<p:message for="controlaEstoque"/>
+				                    </p:outputLabel>
+								</p:panelGrid>
+							
+								<p:separator/>
+								<p:panelGrid id="panelPreco" columns="3" cellpadding="5" layout="grid"  styleClass="no-border ui-fluid">
+									<p:outputLabel for="precoCompra" value="Preço de Compra: "><br/>
+										<p:inputNumber id="precoCompra" styleClass="styleInNumber" value="#{produtoControl.selected.precoCompra}" symbol="R$" decimalPlaces="2" decimalSeparator="," thousandSeparator="." required="true" requiredMessage="Campo Preço de Compra é necessário" >
+											<p:ajax event="change" listener="#{produtoControl.calculaPrecoVenda()}" process="@this" update="frmCadastro:tabViewGeral:precoVenda" />
+										</p:inputNumber>
+										<p:message for="precoCompra"/>
+									</p:outputLabel>
+									
+									<p:outputLabel for="margem" value="Margem: "><br/>
+										<p:inputNumber id="margem" styleClass="styleInNumber" value="#{produtoControl.selected.margem}" decimalPlaces="2" decimalSeparator="," thousandSeparator="" symbol="%" symbolPosition="s" required="true" requiredMessage="Campo Margem é necessário">
+											<p:ajax event="change" listener="#{produtoControl.calculaPrecoVenda()}" process="@this" update="frmCadastro:tabViewGeral:precoVenda" />
+										</p:inputNumber>
+										<p:message for="margem"/>
+									</p:outputLabel>
+									
+									<p:outputLabel for="precoVenda" value="Preço de Venda: "><br/>
+										<p:inputNumber id="precoVenda" styleClass="styleInNumber" value="#{produtoControl.selected.precoVenda}" symbol="R$" decimalPlaces="2" decimalSeparator="," thousandSeparator="." required="true" requiredMessage="Campo Preço Venda é necessário">
+											<p:ajax event="change" listener="#{produtoControl.calculaMargem()}" process="@this" update="frmCadastro:tabViewGeral:margem frmCadastro:tabViewGeral:precoVenda" />
+										</p:inputNumber>
+										<p:message for="precoVenda"/>
+									</p:outputLabel>
+								</p:panelGrid>
+								<p:panelGrid id="panelEstoque" columns="3" cellpadding="5" layout="grid"  styleClass="no-border ui-fluid">
+									<p:outputLabel id="teste" for="qtdeMinina" value="Qtde. Mínima para alerta: "><br/>
+										<p:inputNumber id="qtdeMinina" styleClass="styleInNumber" value="#{produtoControl.selected.qtdMinima}" decimalPlaces="0" decimalSeparator="" thousandSeparator="" required="true" requiredMessage="Campo Qtde. Mínima é necessário"/>
+										<p:message for="qtdeMinina"/>
+									</p:outputLabel>
+									
+									<p:outputLabel for="qtdeProduto" value="Qtde. Estoque: "><br/>
+										<p:inputNumber id="qtdeProduto" styleClass="styleInNumber" value="#{produtoControl.selected.quantidade}" decimalPlaces="0" decimalSeparator="" thousandSeparator="" required="true" requiredMessage="Campo Qtde. Total é necessário"/>
+										<p:message for="qtdeProduto"/>
+									</p:outputLabel>
+								</p:panelGrid>
+							</p:panel>
+						</p:tab>
+						<p:tab title="Fotos">
+							<p:panelGrid id="panelGaleria" columns="1" style="width: 700px" cellpadding="5" layout="grid"  styleClass="no-border ui-fluid">
+								<p:commandButton value="Excluir Fotos" icon="fa fa-trash" styleClass="btn-danger"
+	                            	actionListener="#{produtoControl.excluirFotos()}"
+	                                type="submit" update="frmCadastro:tabViewGeral" style="font-size: 12px; width: 140px" rendered="#{produtoControl.selected.imagemList.size()!=0}">
+	                        	</p:commandButton>
+	                        	<p:outputLabel value="Imagem: " >
+									<p:fileUpload id="selectImagem" fileUploadListener="#{produtoControl.enviaImagem}"
+				                    	sizeLimit="5000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" mode="advanced"
+				                        dragDropSupport="true" previewWidth="70" multiple="true" auto="false" sequential="true"
+				                    	update="messages frmCadastro:growl" label="Escolher" cancelLabel="Cancelar" uploadLabel="Upload" 
+				                    	fileLimitMessage="O limite máximo para upload já foi atingido" invalidSizeMessage="Tamanho da imagem foi excedido" invalidFileMessage="Formato inválido">		  
+				                    </p:fileUpload>
+				                </p:outputLabel>
+				                 
+				                 <p:galleria value="#{produtoControl.selected.imagemList}" var="image" panelWidth="410" panelHeight="187" autoPlay="false" rendered="#{not empty produtoControl.selected.imagemList}">
+			                     	<p:graphicImage value="#{imagemControl.photoImageScreen}" rendered="#{not empty image.idImagem}"
+			                        	cache="false" style="width: 220px; height: 190px; margin-top: 10px">
+			                            <f:param name="cdImagem" value="#{image.idImagem}" />
+			                        </p:graphicImage>
+	                        	</p:galleria>
+	                    			
+	                        </p:panelGrid>
+	                    </p:tab>
+					</p:tabView>
+				<p:separator/>
+				
+				<p:commandButton value="Salvar"
+					style="margin-top: -10px; width: auto"
+					update="frmList:tabela frmCadastro @(.ui-button)"
+					action="#{produtoControl.treatRecord()}"
+					actionListener="#{produtoControl.unRowSelect()}"
+					type="submit"
+					styleClass="btn-block btn-success" icon="fa fa-floppy-o"/>
+					
+				<p:commandButton value="Cancelar"
+					id="brnCancelar"
+					style="margin-top: -10px; width: auto"
+					update="frmList:tabela frmCadastro @(.ui-button)"
+					actionListener="#{produtoControl.unRowSelect()}"
+					action="#{produtoControl.limpaSelecteds()}"
+					onclick="PF('dlgCadastro').hide()"
+					styleClass="btn-block btn-danger" icon="fa fa-close" process="@this"/>	
+			</h:form>
+			</p:dialog>
+	</ui:define>
+</ui:composition>
